@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MOCK Test – PlacementPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none;min-height:100vh}
+.page.active{display:flex}
+
+/* ══════════════════════════════════
+   LANDING PAGE
+══════════════════════════════════ */
+#landing-page{
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  background:#fff;
+  min-height:100vh;
+}
+
+/* Animated diagonal stripe bg */
+.land-bg{
+  position:absolute;inset:0;z-index:0;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f5f5f5 0px,
+    #f5f5f5 1px,
+    transparent 1px,
+    transparent 40px
+  );
+}
+/* Big bold BG text */
+.land-watermark{
+  position:absolute;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(160px,28vw,320px);
+  color:rgba(0,0,0,0.04);
+  letter-spacing:-6px;
+  top:50%;left:50%;
+  transform:translate(-50%,-52%);
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+  z-index:0;
+}
+
+/* Top accent bar */
+.land-topbar{
+  position:absolute;top:0;left:0;right:0;height:5px;
+  background:repeating-linear-gradient(90deg,#111 0px,#111 40px,#fff 40px,#fff 44px);
+  z-index:2;
+}
+
+/* Corner decoration */
+.corner-mark{
+  position:absolute;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:13px;
+  letter-spacing:.2em;
+  color:#bbb;
+  z-index:2;
+}
+.corner-tl{top:24px;left:32px}
+.corner-tr{top:24px;right:32px;text-align:right}
+.corner-br{bottom:24px;right:32px;color:#ccc;font-size:11px}
+
+.landing-content{
+  position:relative;z-index:2;
+  text-align:center;
+  padding:48px 24px;
+  max-width:580px;
+  width:100%;
+  animation:fadeUp .7s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* Title block */
+.title-block{margin-bottom:10px}
+.title-eyebrow{
+  display:block;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:#999;
+  margin-bottom:16px;
+}
+.landing-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(72px,15vw,120px);
+  line-height:.9;
+  letter-spacing:2px;
+  color:#111;
+  margin-bottom:0;
+}
+.landing-title span{
+  display:block;
+  color:#111;
+}
+.landing-title .accent-word{
+  -webkit-text-stroke:2px #111;
+  color:transparent;
+}
+
+.landing-divider{
+  width:60px;height:3px;
+  background:#111;
+  margin:20px auto;
+  position:relative;
+}
+.landing-divider::after{
+  content:'';position:absolute;
+  left:70px;top:0;width:8px;height:3px;background:#ccc;
+}
+
+.landing-sub{
+  font-size:15px;
+  color:#777;
+  margin-bottom:40px;
+  line-height:1.6;
+  font-weight:400;
+}
+
+/* Name input card */
+.name-card{
+  background:#111;
+  border-radius:20px;
+  padding:32px;
+  margin-bottom:36px;
+  text-align:left;
+  position:relative;
+  overflow:hidden;
+}
+.name-card::before{
+  content:'';
+  position:absolute;top:-60px;right:-60px;
+  width:160px;height:160px;
+  background:rgba(255,255,255,0.04);
+  border-radius:50%;
+}
+.name-card label{
+  display:block;
+  font-size:11px;
+  color:#888;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  margin-bottom:10px;
+  font-weight:600;
+}
+.name-card input{
+  width:100%;
+  background:#1e1e1e;
+  border:1.5px solid #333;
+  border-radius:12px;
+  padding:15px 18px;
+  font-size:16px;
+  font-family:'DM Sans',sans-serif;
+  color:#fff;
+  outline:none;
+  transition:border-color .2s,background .2s;
+  margin-bottom:18px;
+}
+.name-card input:focus{border-color:#fff;background:#252525}
+.name-card input::placeholder{color:#555}
+
+#start-btn{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  background:#fff;
+  color:#111;
+  border:none;
+  border-radius:12px;
+  padding:17px 24px;
+  font-size:16px;
+  font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.01em;
+  position:relative;
+  z-index:1;
+}
+#start-btn:hover{
+  background:#f0f0f0;
+  transform:translateY(-2px);
+  box-shadow:0 10px 32px rgba(255,255,255,.15);
+}
+#start-btn:active{transform:translateY(0)}
+.btn-arrow{
+  display:flex;align-items:center;justify-content:center;
+  width:28px;height:28px;
+  background:#111;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+/* Stats */
+.stats-row{
+  display:flex;justify-content:center;gap:0;
+  border:1.5px solid #e8e8e8;
+  border-radius:16px;
+  overflow:hidden;
+}
+.stat{
+  flex:1;text-align:center;padding:18px 12px;
+  position:relative;
+}
+.stat:not(:last-child)::after{
+  content:'';
+  position:absolute;right:0;top:20%;bottom:20%;
+  width:1px;background:#e8e8e8;
+}
+.stat-num{
+  display:block;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px;
+  color:#111;
+  line-height:1;
+  margin-bottom:4px;
+}
+.stat-label{
+  font-size:11px;
+  color:#999;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  font-weight:600;
+}
+
+/* ══════════════════════════════════
+   QUIZ PAGE
+══════════════════════════════════ */
+#quiz-page{flex-direction:column;background:#fff}
+
+.quiz-header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(16px);
+  border-bottom:2px solid #111;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:14px 32px;
+}
+.qh-left{display:flex;align-items:center;gap:16px}
+.qh-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:1px;color:#111;
+}
+.qh-name{
+  font-size:13px;color:#888;
+  border-left:2px solid #111;
+  padding-left:16px;font-weight:500;
+}
+
+/* Timer */
+.timer-wrap{position:relative;width:60px;height:60px}
+.timer-ring{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.timer-bg{fill:none;stroke:#f0f0f0;stroke-width:4}
+.timer-progress{
+  fill:none;stroke:#111;stroke-width:4;stroke-linecap:round;
+  stroke-dasharray:150.8;stroke-dashoffset:0;
+  transition:stroke-dashoffset 1s linear,stroke .3s;
+}
+.timer-text{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:16px;font-weight:700;
+  font-family:'Bebas Neue',sans-serif;
+  color:#111;letter-spacing:.5px;
+}
+
+/* Quiz body */
+.quiz-body{flex:1;max-width:800px;margin:0 auto;width:100%;padding:32px 24px 56px}
+
+/* Progress */
+.progress-bar-wrap{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.progress-bar-track{flex:1;height:4px;background:#f0f0f0;border-radius:10px;overflow:hidden}
+.progress-bar-fill{height:100%;background:#111;border-radius:10px;transition:width .4s ease}
+.progress-label{font-size:13px;color:#999;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Question card */
+.question-card{
+  background:#fff;
+  border:2px solid #111;
+  border-radius:20px;
+  padding:40px;
+  margin-bottom:24px;
+  transition:opacity .25s ease,transform .25s ease;
+  position:relative;
+  /* Subtle shadow for depth */
+  box-shadow:4px 4px 0px #111;
+}
+.q-meta{
+  display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:24px;
+}
+.q-subject{
+  background:#111;
+  color:#fff;
+  padding:5px 16px;border-radius:100px;
+  font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;
+}
+.q-num{
+  color:#bbb;font-size:13px;font-weight:600;
+  font-variant-numeric:tabular-nums;
+}
+.q-text{
+  font-size:19px;line-height:1.6;font-weight:600;
+  margin-bottom:32px;color:#111;
+}
+
+/* Options */
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.option-btn{
+  background:#fafafa;
+  border:1.5px solid #e0e0e0;
+  border-radius:14px;
+  padding:16px 18px;
+  color:#333;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:500;
+  cursor:pointer;
+  transition:all .18s ease;
+  text-align:left;line-height:1.5;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.option-btn:hover{
+  border-color:#111;
+  background:#f5f5f5;
+  transform:translateY(-1px);
+  box-shadow:2px 2px 0px #111;
+}
+.option-btn.selected{
+  border-color:#111;
+  background:#111;
+  color:#fff;
+  box-shadow:3px 3px 0px #888;
+}
+.opt-letter{
+  min-width:28px;height:28px;
+  border:1.5px solid #ddd;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#999;flex-shrink:0;
+  background:#fff;
+  transition:all .18s;
+}
+.option-btn:hover .opt-letter{border-color:#111;color:#111}
+.option-btn.selected .opt-letter{
+  background:#fff;color:#111;border-color:#fff;
+}
+
+/* Nav */
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:13px 26px;border-radius:12px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:all .18s;
+  border:2px solid #111;
+  background:#fff;color:#111;
+}
+.nav-btn:hover{background:#111;color:#fff;transform:translateY(-1px)}
+.submit-btn{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+  padding:13px 40px;font-size:15px;
+}
+.submit-btn:hover{
+  background:#333;
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
+  color:#fff;
+}
+
+/* ══════════════════════════════════
+   RESULT PAGE
+══════════════════════════════════ */
+#result-page{
+  position:relative;
+  align-items:center;justify-content:center;
+  overflow:hidden;flex-direction:column;
+  background:#fff;
+}
+.result-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.result-bg-stripes{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,#f8f8f8 0px,#f8f8f8 1px,transparent 1px,transparent 40px
+  );
+}
+.result-topbar{
+  position:absolute;top:0;left:0;right:0;height:5px;
+  background:repeating-linear-gradient(90deg,#111 0px,#111 40px,#fff 40px,#fff 44px);
+  z-index:2;
+}
+
+.result-content{
+  position:relative;z-index:2;
+  text-align:center;padding:52px 24px;
+  max-width:560px;width:100%;
+  animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both;
+}
+.result-icon{font-size:56px;margin-bottom:14px;display:block}
+.result-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px;letter-spacing:2px;
+  color:#111;margin-bottom:4px;
+}
+.result-name{color:#999;font-size:15px;margin-bottom:36px;font-weight:500}
+
+/* Score ring */
+.score-ring-wrap{
+  position:relative;display:inline-flex;
+  align-items:center;justify-content:center;
+  margin-bottom:36px;
+}
+.score-ring{transform:rotate(-90deg)}
+.score-bg{fill:none;stroke:#f0f0f0;stroke-width:10}
+.score-arc{
+  fill:none;stroke:#111;stroke-width:10;stroke-linecap:round;
+  stroke-dasharray:502.65;stroke-dashoffset:502.65;
+  transition:stroke-dashoffset 1.5s cubic-bezier(.34,1.56,.64,1),stroke .5s;
+}
+.score-inner{position:absolute;text-align:center}
+.score-pct{
+  display:block;font-family:'Bebas Neue',sans-serif;
+  font-size:48px;color:#111;letter-spacing:1px;
+}
+.score-frac{font-size:14px;color:#aaa;font-weight:600}
+
+/* Result cards */
+.result-cards{
+  display:flex;justify-content:center;gap:0;
+  border:2px solid #111;border-radius:16px;
+  overflow:hidden;margin-bottom:28px;
+  box-shadow:4px 4px 0 #111;
+}
+.rc{
+  flex:1;padding:22px 16px;
+  position:relative;
+}
+.rc:not(:last-child)::after{
+  content:'';position:absolute;right:0;top:15%;bottom:15%;
+  width:2px;background:#111;
+}
+.rc span{
+  display:block;font-family:'Bebas Neue',sans-serif;
+  font-size:40px;letter-spacing:1px;margin-bottom:4px;color:#111;
+}
+.rc label{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+.correct-rc span{color:#111}
+.wrong-rc span{color:#555}
+.skip-rc span{color:#999}
+
+/* Pass/fail indicator on card */
+.correct-rc{background:#f5f5f5}
+
+.result-msg{
+  font-size:15px;color:#666;
+  margin-bottom:28px;line-height:1.7;
+  padding:18px 22px;
+  background:#f9f9f9;
+  border-radius:12px;
+  border-left:3px solid #111;
+  text-align:left;
+}
+
+/* Subject breakdown */
+.subject-breakdown{
+  text-align:left;
+  border:2px solid #111;
+  border-radius:16px;padding:22px 24px;
+  margin-bottom:28px;
+  box-shadow:3px 3px 0 #ddd;
+}
+.subject-breakdown h4{
+  font-size:11px;color:#999;text-transform:uppercase;
+  letter-spacing:.15em;margin-bottom:18px;font-weight:700;
+}
+.sb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sb-name{font-size:13px;color:#111;min-width:96px;font-weight:600}
+.sb-bar-wrap{flex:1;margin:0 14px;height:6px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:4px;background:#111;transition:width 1s ease;width:0%}
+.sb-score{font-size:13px;color:#111;font-weight:700;min-width:36px;text-align:right}
+
+.restart-btn{
+  background:#111;color:#fff;border:2px solid #111;
+  border-radius:12px;padding:16px 48px;
+  font-size:16px;font-weight:700;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  transition:all .2s;
+  box-shadow:3px 3px 0 #888;
+}
+.restart-btn:hover{
+  background:#fff;color:#111;
+  transform:translateY(-2px);
+  box-shadow:4px 4px 0 #111;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:560px){
+  .options-grid{grid-template-columns:1fr}
+  .question-card{padding:22px}
+  .quiz-header{padding:12px 18px}
+  .result-cards{gap:0}
+  .rc{padding:18px 10px}
+  .nav-btn{padding:11px 16px;font-size:13px}
+  .corner-mark{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ LANDING PAGE ══════ -->
+<div id="landing-page" class="page active">
+  <div class="land-bg"></div>
+  <div class="land-watermark">MOCK</div>
+  <div class="land-topbar"></div>
+  <span class="corner-mark corner-tl">PLACEMENT · 2025</span>
+  <span class="corner-mark corner-tr">50 QUESTIONS · 7 TOPICS</span>
+  <span class="corner-mark corner-br">PRO EDITION</span>
+
+  <div class="landing-content">
+    <div class="title-block">
+      <span class="title-eyebrow">Prepare · Practice · Succeed</span>
+      <h1 class="landing-title">
+        <span>MOCK</span>
+        <span class="accent-word">TEST</span>
+      </h1>
+    </div>
+    <div class="landing-divider"></div>
+    <p class="landing-sub">Real placement questions from top companies · 7 subjects · 60 seconds per question</p>
+
+    <div class="name-card">
+      <label for="student-name">Enter Your Name to Begin</label>
+      <input type="text" id="student-name" placeholder="e.g. Ravi Kumar" autocomplete="off"/>
+      <button id="start-btn" onclick="startQuiz()">
+        <span>Start Mock Test</span>
+        <span class="btn-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><span class="stat-num">50</span><span class="stat-label">Questions</span></div>
+      <div class="stat"><span class="stat-num">7</span><span class="stat-label">Subjects</span></div>
+      <div class="stat"><span class="stat-num">60s</span><span class="stat-label">Per Question</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ QUIZ PAGE ══════ -->
+<div id="quiz-page" class="page">
+  <header class="quiz-header">
+    <div class="qh-left">
+      <span class="qh-logo">MOCK TEST</span>
+      <span class="qh-name" id="qh-name"></span>
+    </div>
+    <div class="qh-right">
+      <div class="timer-wrap">
+        <svg class="timer-ring" width="60" height="60">
+          <circle cx="30" cy="30" r="24" class="timer-bg"/>
+          <circle cx="30" cy="30" r="24" class="timer-progress" id="timer-circle"/>
+        </svg>
+        <span class="timer-text" id="timer-text">60</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="quiz-body">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill" style="width:2%"></div>
+      </div>
+      <span class="progress-label" id="progress-label">1 / 50</span>
+    </div>
+
+    <div class="question-card" id="question-card">
+      <div class="q-meta">
+        <span class="q-subject" id="q-subject">—</span>
+        <span class="q-num" id="q-num">Q1</span>
+      </div>
+      <p class="q-text" id="q-text">Loading...</p>
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn" onclick="prevQuestion()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Previous
+      </button>
+      <button class="nav-btn submit-btn" onclick="confirmSubmit()">Submit All</button>
+      <button class="nav-btn" onclick="nextQuestion()">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RESULT PAGE ══════ -->
+<div id="result-page" class="page">
+  <div class="result-bg">
+    <div class="result-bg-stripes"></div>
+    <div class="result-topbar"></div>
+  </div>
+  <div class="result-content">
+    <span class="result-icon" id="result-icon">🏆</span>
+    <h2 class="result-title">TEST COMPLETE</h2>
+    <p class="result-name" id="result-name"></p>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring" width="190" height="190">
+        <circle cx="95" cy="95" r="80" class="score-bg"/>
+        <circle cx="95" cy="95" r="80" class="score-arc" id="score-arc"/>
+      </svg>
+      <div class="score-inner">
+        <span class="score-pct" id="score-pct">0%</span>
+        <span class="score-frac" id="score-frac">0/50</span>
+      </div>
+    </div>
+
+    <div class="result-cards">
+      <div class="rc correct-rc"><span id="rc-correct">0</span><label>Correct</label></div>
+      <div class="rc wrong-rc"><span id="rc-wrong">0</span><label>Wrong</label></div>
+      <div class="rc skip-rc"><span id="rc-skip">0</span><label>Skipped</label></div>
+    </div>
+
+    <p class="result-msg" id="result-msg"></p>
+    <div class="subject-breakdown" id="subject-breakdown"></div>
+    <button class="restart-btn" onclick="restartQuiz()">↺ Retake Test</button>
+  </div>
+</div>
+
+<script>
+// ═══ QUESTION BANK (50 questions, 7 subjects) ═══
+var QB=[
+  // APTITUDE (8)
+  {s:"Aptitude",q:"A train travels 360 km in 4 hours. What is its speed in m/s?",o:["25 m/s","22.5 m/s","30 m/s","20 m/s"],a:0},
+  {s:"Aptitude",q:"If 6 men do a job in 12 days, how many days will 9 men take to finish the same job?",o:["8 days","10 days","6 days","9 days"],a:0},
+  {s:"Aptitude",q:"A shopkeeper buys an item for ₹800 and sells it for ₹1000. What is the profit percentage?",o:["20%","25%","30%","15%"],a:1},
+  {s:"Aptitude",q:"Compound interest on ₹10,000 at 10% per annum for 2 years is:",o:["₹2100","₹2000","₹1900","₹2200"],a:0},
+  {s:"Aptitude",q:"Two pipes A and B fill a tank in 20 and 30 minutes respectively. Together they fill it in:",o:["10 min","12 min","15 min","8 min"],a:1},
+  {s:"Aptitude",q:"A car goes A to B at 60 km/h and returns at 40 km/h. What is the average speed for the whole trip?",o:["50 km/h","48 km/h","52 km/h","46 km/h"],a:1},
+  {s:"Aptitude",q:"What is 15% of 80% of 500?",o:["60","48","72","55"],a:0},
+  {s:"Aptitude",q:"Ratio of boys to girls is 3:2 in a class of 40 students. How many boys are there?",o:["20","24","18","22"],a:1},
+  // REASONING (7)
+  {s:"Reasoning",q:"Find the odd one out: 2, 3, 5, 7, 9, 11",o:["9","7","11","5"],a:0},
+  {s:"Reasoning",q:"If CLOCK is coded as KCOLC, how is LIGHT coded?",o:["THGIL","LHGIT","TGHIL","TGIHL"],a:0},
+  {s:"Reasoning",q:"A is B's sister. B is C's brother. C is D's father. How is A related to D?",o:["Aunt","Mother","Sister","Cousin"],a:0},
+  {s:"Reasoning",q:"Complete the series: 2, 6, 12, 20, 30, ?",o:["42","40","44","38"],a:0},
+  {s:"Reasoning",q:"A clock shows 3:15. What is the angle between hour and minute hands?",o:["7.5°","0°","15°","22.5°"],a:0},
+  {s:"Reasoning",q:"What comes next? 1, 4, 9, 16, 25, ?",o:["36","30","35","40"],a:0},
+  {s:"Reasoning",q:"Pointing to a man, a woman said 'His mother is the only daughter of my mother.' How is the woman related to the man?",o:["Mother","Grandmother","Sister","Aunt"],a:0},
+  // OS (8)
+  {s:"OS",q:"Which page replacement algorithm suffers from Belady's anomaly?",o:["FIFO","LRU","OPT","LFU"],a:0},
+  {s:"OS",q:"A process is in the WAITING state when it is:",o:["Waiting for I/O or an event","Ready to execute","Currently executing on CPU","Terminated"],a:0},
+  {s:"OS",q:"Which CPU scheduling algorithm can cause starvation?",o:["Priority Scheduling","Round Robin","FCFS","None of these"],a:0},
+  {s:"OS",q:"Which is NOT a necessary condition for deadlock?",o:["Preemption","Mutual Exclusion","Hold and Wait","Circular Wait"],a:0},
+  {s:"OS",q:"The process of loading the OS kernel into memory at startup is called:",o:["Bootstrapping","Spooling","Thrashing","Paging"],a:0},
+  {s:"OS",q:"Thrashing in an OS occurs when:",o:["CPU spends more time paging than executing","Too many processes are idle","Memory is underutilized","CPU scheduling fails"],a:0},
+  {s:"OS",q:"Which IPC mechanism is the fastest for communication between processes on the same machine?",o:["Shared Memory","Message Passing","Pipes","Sockets"],a:0},
+  {s:"OS",q:"In semaphore terminology, the wait() operation is also called:",o:["P operation","V operation","Signal","Release"],a:0},
+  // CNS (7)
+  {s:"CNS",q:"Which OSI layer is responsible for end-to-end delivery between hosts?",o:["Transport Layer","Network Layer","Session Layer","Data Link Layer"],a:0},
+  {s:"CNS",q:"TCP is preferred over UDP when:",o:["Reliable ordered delivery is needed","Speed is more critical than reliability","Broadcasting is required","Connectionless communication is needed"],a:0},
+  {s:"CNS",q:"Which protocol maps an IP address to a MAC address?",o:["ARP","RARP","DNS","DHCP"],a:0},
+  {s:"CNS",q:"Which network topology requires a central hub or switch?",o:["Star","Bus","Ring","Mesh"],a:0},
+  {s:"CNS",q:"The sliding window protocol is primarily used for:",o:["Flow control","Error detection","Routing","Encryption"],a:0},
+  {s:"CNS",q:"Which of the following is a private IP address?",o:["192.168.1.10","8.8.8.8","172.32.0.1","200.100.50.10"],a:0},
+  {s:"CNS",q:"HTTP works on which port number by default?",o:["80","443","21","22"],a:0},
+  // SQL (7)
+  {s:"SQL",q:"Which SQL clause is used to filter rows AFTER a GROUP BY operation?",o:["HAVING","WHERE","ORDER BY","LIMIT"],a:0},
+  {s:"SQL",q:"A FOREIGN KEY constraint ensures:",o:["Referential integrity","Unique values","Non-null values","Primary key uniqueness"],a:0},
+  {s:"SQL",q:"Which normal form eliminates transitive functional dependencies?",o:["3NF","1NF","2NF","BCNF"],a:0},
+  {s:"SQL",q:"What does SELECT DISTINCT do?",o:["Removes duplicate rows from result","Selects only the first row","Sorts the result","Filters NULL values"],a:0},
+  {s:"SQL",q:"Which JOIN type returns only the rows that have matching values in BOTH tables?",o:["INNER JOIN","LEFT JOIN","RIGHT JOIN","FULL OUTER JOIN"],a:0},
+  {s:"SQL",q:"Which SQL command permanently saves changes made during a transaction?",o:["COMMIT","ROLLBACK","SAVEPOINT","BEGIN"],a:0},
+  {s:"SQL",q:"Which SQL aggregate function returns the maximum value in a column?",o:["MAX()","MIN()","SUM()","AVG()"],a:0},
+  // PROGRAMMING (8)
+  {s:"Programming",q:"What is the output of: print(type([]))?",o:["<class 'list'>","<class 'tuple'>","<class 'dict'>","<class 'array'>"],a:0},
+  {s:"Programming",q:"Which keyword is used to handle exceptions in Python?",o:["except","catch","error","handle"],a:0},
+  {s:"Programming",q:"In Java, which access modifier makes a member accessible ONLY within the same class?",o:["private","protected","default","public"],a:0},
+  {s:"Programming",q:"What is the time complexity of Binary Search on a sorted array?",o:["O(log n)","O(n)","O(n²)","O(1)"],a:0},
+  {s:"Programming",q:"Which Python data structure is immutable (cannot be changed after creation)?",o:["Tuple","List","Dictionary","Set"],a:0},
+  {s:"Programming",q:"In Java, applying the final keyword to a class means:",o:["The class cannot be inherited","The class is abstract","The class has no constructor","The class is serializable"],a:0},
+  {s:"Programming",q:"What does Python's yield keyword do?",o:["Returns a value from a generator without terminating it","Exits the function immediately","Skips the current loop iteration","Imports a module"],a:0},
+  {s:"Programming",q:"What is the output of: x = [1, 2, 3]; print(x[-1])?",o:["3","1","-1","Error"],a:0},
+  // CLOUD (5)
+  {s:"Cloud",q:"Which cloud service model gives the user the most control over the infrastructure?",o:["IaaS","PaaS","SaaS","FaaS"],a:0},
+  {s:"Cloud",q:"AWS S3 is an example of which type of storage?",o:["Object Storage","Block Storage","File Storage","Cache Storage"],a:0},
+  {s:"Cloud",q:"Which AWS service is specifically used for auto-scaling web applications?",o:["EC2 Auto Scaling","AWS Lambda","Amazon RDS","AWS CloudFront"],a:0},
+  {s:"Cloud",q:"Containerisation technology is best represented by:",o:["Docker & Kubernetes","VMware vSphere","AWS EC2","Azure Active Directory"],a:0},
+  {s:"Cloud",q:"Serverless computing means the developer:",o:["Does not manage servers; infrastructure auto-scales","Works without any servers","Uses only on-premise infrastructure","Gets a dedicated server per user"],a:0}
+];
+
+// ═══ STATE ═══
+var questions=[],current=0,answers=[],timerID=null,timeLeft=60,studentName="";
+var CIRC=2*Math.PI*24;
+
+// ═══ UTILS ═══
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+function showPage(id){
+  var pages=document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++) pages[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// ═══ START ═══
+function startQuiz(){
+  var inp=document.getElementById('student-name').value.trim();
+  if(!inp){
+    var el=document.getElementById('student-name');
+    el.style.borderColor='#999';
+    el.placeholder='Please enter your name!';
+    el.focus();
+    setTimeout(function(){el.style.borderColor='';el.placeholder='e.g. Ravi Kumar';},2500);
+    return;
+  }
+  studentName=inp;
+  document.getElementById('qh-name').textContent='👤 '+studentName;
+  questions=shuffle(QB);
+  answers=new Array(questions.length).fill(null);
+  current=0;
+  showPage('quiz-page');
+  renderQuestion();
+}
+
+// ═══ RENDER ═══
+function renderQuestion(){
+  var q=questions[current];
+  document.getElementById('q-subject').textContent=q.s;
+  document.getElementById('q-num').textContent='Q'+(current+1)+' of '+questions.length;
+  document.getElementById('q-text').textContent=q.q;
+  var pct=((current+1)/questions.length)*100;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-label').textContent=(current+1)+' / '+questions.length;
+  var letters=['A','B','C','D'];
+  var grid=document.getElementById('options-grid');
+  grid.innerHTML='';
+  for(var i=0;i<q.o.length;i++){
+    (function(idx){
+      var btn=document.createElement('button');
+      btn.className='option-btn'+(answers[current]===idx?' selected':'');
+      btn.innerHTML='<span class="opt-letter">'+letters[idx]+'</span><span>'+q.o[idx]+'</span>';
+      btn.onclick=function(){selectOption(idx);};
+      grid.appendChild(btn);
+    })(i);
+  }
+  var card=document.getElementById('question-card');
+  card.style.opacity='0';card.style.transform='translateX(14px)';
+  setTimeout(function(){card.style.opacity='1';card.style.transform='translateX(0)';},20);
+  resetTimer();
+}
+
+function selectOption(idx){
+  answers[current]=idx;
+  var btns=document.querySelectorAll('.option-btn');
+  for(var i=0;i<btns.length;i++) btns[i].classList.toggle('selected',i===idx);
+}
+
+function nextQuestion(){if(current<questions.length-1){current++;renderQuestion();}}
+function prevQuestion(){if(current>0){current--;renderQuestion();}}
+
+// ═══ TIMER ═══
+function resetTimer(){
+  clearInterval(timerID);timeLeft=60;updateTimerUI();
+  timerID=setInterval(function(){
+    timeLeft--;updateTimerUI();
+    if(timeLeft<=0){
+      clearInterval(timerID);
+      if(current<questions.length-1){current++;renderQuestion();}
+      else submitQuiz();
+    }
+  },1000);
+}
+function updateTimerUI(){
+  var el=document.getElementById('timer-text');
+  var cir=document.getElementById('timer-circle');
+  el.textContent=timeLeft;
+  cir.style.strokeDashoffset=CIRC*(1-timeLeft/60);
+  if(timeLeft<=10){cir.style.stroke='#333';el.style.color='#333';}
+  else if(timeLeft<=20){cir.style.stroke='#666';el.style.color='#666';}
+  else{cir.style.stroke='#111';el.style.color='#111';}
+}
+
+// ═══ CONFIRM SUBMIT ═══
+function confirmSubmit(){
+  var answered=0;
+  for(var i=0;i<answers.length;i++) if(answers[i]!==null) answered++;
+  var skipped=questions.length-answered;
+  if(skipped>0){
+    var go=confirm('You have '+skipped+' unanswered question(s).\n\nClick OK to submit anyway, or Cancel to continue.');
+    if(!go) return;
+  }
+  submitQuiz();
+}
+
+// ═══ SUBMIT ═══
+function submitQuiz(){
+  clearInterval(timerID);
+  var correct=0,wrong=0,skipped=0;
+  var subjectStats={};
+  for(var i=0;i<answers.length;i++){
+    var subj=questions[i].s;
+    if(!subjectStats[subj]) subjectStats[subj]={correct:0,total:0};
+    subjectStats[subj].total++;
+    if(answers[i]===null) skipped++;
+    else if(answers[i]===questions[i].a){correct++;subjectStats[subj].correct++;}
+    else wrong++;
+  }
+  var total=questions.length;
+  var pct=Math.round((correct/total)*100);
+  document.getElementById('result-name').textContent='Well done, '+studentName+'!';
+  document.getElementById('score-frac').textContent=correct+'/'+total;
+  document.getElementById('rc-correct').textContent=correct;
+  document.getElementById('rc-wrong').textContent=wrong;
+  document.getElementById('rc-skip').textContent=skipped;
+  var icon,msg;
+  if(pct>=80){icon='🏆';msg='Outstanding! You are placement-ready. Top companies like TCS, Infosys and Accenture are looking for candidates like you!';}
+  else if(pct>=60){icon='🎯';msg='Great score! A bit more practice on weak areas and you will crack any placement test.';}
+  else if(pct>=40){icon='📚';msg='Good attempt! Focus on the subjects where you dropped marks and you will get there!';}
+  else{icon='💪';msg='Keep practising! Every attempt makes you stronger. Review each topic carefully and retake the test.';}
+  document.getElementById('result-icon').textContent=icon;
+  document.getElementById('result-msg').textContent=msg;
+  // Subject breakdown
+  var bd=document.getElementById('subject-breakdown');
+  var html='<h4>Subject-wise Performance</h4>';
+  for(var subj in subjectStats){
+    var st=subjectStats[subj];
+    var sp=st.total>0?Math.round((st.correct/st.total)*100):0;
+    var col=sp>=70?'#111':sp>=40?'#555':'#aaa';
+    html+='<div class="sb-row"><span class="sb-name">'+subj+'</span><div class="sb-bar-wrap"><div class="sb-bar-fill" style="background:'+col+'" data-pct="'+sp+'"></div></div><span class="sb-score">'+st.correct+'/'+st.total+'</span></div>';
+  }
+  bd.innerHTML=html;
+  showPage('result-page');
+  setTimeout(function(){
+    var arc=document.getElementById('score-arc');
+    var arcC=2*Math.PI*80;
+    arc.style.strokeDashoffset=arcC*(1-pct/100);
+    arc.style.stroke=pct>=70?'#111':pct>=40?'#555':'#aaa';
+    var cnt=0,pctEl=document.getElementById('score-pct');
+    var step=setInterval(function(){cnt++;pctEl.textContent=cnt+'%';if(cnt>=pct)clearInterval(step);},18);
+    var bars=document.querySelectorAll('.sb-bar-fill');
+    setTimeout(function(){for(var b=0;b<bars.length;b++) bars[b].style.width=bars[b].getAttribute('data-pct')+'%';},200);
+  },400);
+}
+
+// ═══ RESTART ═══
+function restartQuiz(){
+  clearInterval(timerID);
+  current=0;answers=[];questions=[];
+  document.getElementById('student-name').value='';
+  document.getElementById('score-arc').style.strokeDashoffset='502.65';
+  document.getElementById('score-pct').textContent='0%';
+  showPage('landing-page');
+}
+
+document.getElementById('student-name').addEventListener('keypress',function(e){
+  if(e.key==='Enter') startQuiz();
+});
+</script>
+</body>
+</html>
